@@ -1,0 +1,140 @@
+﻿
+/* SURVAY */
+
+
+.survey-main {
+	
+    display: flex;
+    width: 100%;
+    height: 100%;
+    background-color: #FFFFFF;
+    border-collapse: collapse;
+    border-radius: 10px;
+    padding: 20px;
+    flex-direction: column; 
+
+}
+
+.SurveyTitle{
+margin: 20px 0px 20px 0px; 
+font-weight: bold;
+
+}
+
+.top-box {
+    flex: 4;
+    display: flex;
+    padding: 20px;
+    flex-direction: column;
+}
+
+.bottom-box {
+  flex-direction: column; 
+  flex: 0.1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  background-color: white;
+}
+
+
+
+
+.SurveyBox {
+    width: 100%;
+    height: 50px;
+}
+
+.SurveyButton {
+    float: right;
+    margin-top: 20px;
+    border: 1px solid;
+    border-radius: 4px;
+    background-color: #3039a6;
+    color: white;
+    height: 30px;
+    width: 80px;
+}
+
+.qBox {
+    width: 100%;
+    height: 40px;	
+    text-align: start;
+    padding-left: 15px;
+}
+
+.sBox{    
+	text-align: start;
+    padding-left: 15px;
+    border-bottom: 1px solid #ced4da;
+    padding: 20px;
+}
+
+
+.submitButton{
+	float: right; 
+	margin-top: 20px;
+	}
+
+
+.select {
+  height: 10px;
+  width: 5px;
+}
+
+
+.round-checkbox {
+  
+    -moz-appearance: none;
+    margin-right: 10px;
+    appearance: none;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    border: 2px solid gray;
+    outline: none;
+    transition: all 0.3s;
+}
+
+.round-checkbox:checked {
+  background-color: gray;
+}
+
+
+
+.scBox {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.box-text {
+  margin-left: 10px;
+}
+
+.remove-btn {
+    border: 1px solid;
+    border-radius: 4px;
+    background-color: #ced4da7a;
+    color: white;
+    margin-left: 10px;
+    height: 40px;
+    width: 29px;
+}
+
+.scBox-input {
+   width: 100%; 
+   height: 40px;
+   text-align: center;
+}
+
+.blueBtn {
+	
+    border: 1px solid;
+    border-radius: 4px;
+    background-color: #3039a6;
+    color: white;
+    height: 30px;
+    width: 100px;
+}

@@ -1,0 +1,139 @@
+@charset "UTF-8";
+
+
+.border-radius {
+	border-radius: 5px;
+}
+
+.insa-info-table {
+	border-radius : 8px;
+	padding : 20px;
+	background: #b8d9fa4f;
+	margin-bottom: 30px;
+	width: 100%;
+}
+
+.insa-info-table tr {
+	height : 40px;
+	border : 1px solid black;
+}
+
+.insa-info-table tbody tr td {
+	width: 200px;
+}
+
+.my-insa {
+	border-bottom: 1px solid #ced4da;
+	border-top: 2px solid #212529;
+}
+
+.geuntae-info-table, .dpMove-info-table{
+	width: 100%;
+	margin-bottom : 30px;
+	border-radius : 5px; 
+	width : 100%;
+	border-collapse : collapse;
+	padding : 20px;
+	background: white;
+	height : 100px;
+	border: 1.5px solid #ced4da;
+}
+
+.workhistory-container{
+	display: flex;
+}
+
+.workhistory-left {
+	flex-basis: 50%;
+	margin-right: 3%;
+}
+
+
+.workhistory-right{
+	flex-basis: 50%;
+}
+
+
+.geuntae-info-table tr, .dpMove-info-table tr{
+	text-align : center;
+	height : 50px;
+}
+
+.geuntae-info-table td, .dpMove-info-table td{
+	text-align : center;
+	height : 50px;
+	border-bottom: 1px solid #ced4da;
+}
+
+
+
+.geuntae-info-table tr:first-child, .dpMove-info-table tr:first-child {
+	border-bottom : 1px solid #ced4da;;
+}
+
+.title-name {
+	padding-bottom: 8px;
+}
+
+.main-text {
+	font-weight: bold;
+}
+
+.insateam {
+	display: none;	
+}
+
+.pwd-check-h3 {
+	font-size: 20px;
+    margin-top: 0;
+}
+
+.pwd-check-name {
+	width: 40%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 14px;
+    cursor: auto;
+}
+
+.pwd-check-pwd {
+	width: 40%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 14px;
+}
+
+.check-pwd-btn {
+	background-color: #004080;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.check-pwd-btn:hover {
+	background-color: #8080ff;
+}
+
+.pwd-check-p {
+	margin-top: 10px;
+    font-size: 14px;
+}
+
+
+.pwd-check {
+	border: 1px solid #ced4da;
+	text-align: center;
+	border-radius: 8px;
+	padding-top: 10%;
+	padding-bottom: 10%;
+	background: #b8d9fa4f;
+}

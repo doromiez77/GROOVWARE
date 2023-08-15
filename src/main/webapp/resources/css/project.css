@@ -1,0 +1,47 @@
+@charset "UTF-8";
+
+
+.pj {
+	padding: 50px;
+	display: flex;
+	flex-direction : column;
+	justify-content: center;
+	position: relative;
+	top:50px;
+	text-align : center;
+}
+
+.pj_main_img{
+	display: flex;
+  	justify-content: center;
+  	align-items: center;
+}
+
+.pj_main_alert{
+	font-size : 80px;
+	padding: 20px;
+}
+
+.pj_main_ment{
+	font-size : 20px;
+	padding: 10px;
+}
+
+.pj_main_btn{
+	padding: 50px;
+}
+
+.pj_main_btn button {
+  padding: 20px 40px; 
+  font-size: 24px; 
+  cursor: pointer;
+}
+
+.pj_write label {
+	font-weight: bold;
+	font-size: 20px;
+	padding-top: 100px;
+}
+
+
+

@@ -1,0 +1,36 @@
+@charset "UTF-8";
+
+/* 모달 스타일 */
+.modal-profile {
+	display: none;
+	position: fixed;
+	z-index: 1;
+	left: 0;
+	top: 0;
+	width: 120%;
+	height: 100%;
+	overflow: auto;
+	background-color: rgba(0, 0, 0, 0.5);
+	border-radius: 3px;
+}
+
+.modal-content-profile {
+	background-color: #fefefe;
+	/* margin: 2% 2%; */
+	width: 100%;
+	height: fit-content;
+}
+
+.close-profile {
+	color: #aaa;
+	float: right;
+	font-size: 28px;
+	font-weight: bold;
+	cursor: pointer;
+}
+
+.close-profile:hover, .close-profile:focus {
+	color: black;
+	text-decoration: none;
+	cursor: pointer;
+}

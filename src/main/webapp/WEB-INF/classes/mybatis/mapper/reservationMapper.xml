@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="reservation">
+	<!-- 회의실 조회 -->
+	<select id="listMeetingroom" resultType="com.sp.grooveware.reservation.Reservation">
+		select meroom_id, meroom_name, meroom_info, meroom_status
+		FROM meetingroom
+		ORDER BY meroom_id
+	</select>
+	
+	<!-- 회의실별 정보조회 조회 -->
+	<select id="Meetingroom" resultType="com.sp.grooveware.reservation.Reservation">
+		select meroom_id, meroom_name, meroom_info, meroom_status
+		FROM meetingroom
+		WHERE meroom_id=#{meroom_id}
+	</select>
+	
+	<!-- 회의실 등록 -->
+	<insert id="insertMeetingroom" parameterType="com.sp.grooveware.reservation.Reservation">
+		INSERT INTO meetingroom (meroom_id, meroom_name, meroom_info, meroom_status) 
+		VALUES(MEETINGROOM_SEQ.NEXTVAL, #{meroom_name}, #{meroom_info}, 0)
+	</insert>
+	
+	<!-- 회의실 정보 수정 -->
+	<update id="updateMeetingroom" parameterType="com.sp.grooveware.reservation.Reservation">
+		UPDATE meetingroom SET meroom_info=#{meroom_info}
+		WHERE meroom_id=#{meroom_id}
+	</update>
+
+	<!-- 회의실 사용상태 변경(사용불가) -->
+	<update id="updateMrStatus" parameterType="com.sp.grooveware.reservation.Reservation">
+		UPDATE meetingroom SET meroom_status=1 
+		WHERE meroom_id=#{meroom_id}
+	</update>
+
+	<!-- 회의실 예약하기 -->
+	<insert id="insertMrRes" parameterType="com.sp.grooveware.reservation.Reservation">
+		INSERT INTO meetingroom_reservation (meroom_res_no, meroom_id, emp_no, meroom_resdate, res_starttime, res_endtime, res_content) 
+		VALUES(MEETINGROOM_RESERVATION_SEQ.NEXTVAL, #{meroom_id}, #{emp_no}, TO_DATE(#{meroom_resdate}, 'YYYY-MM-DD'), 
+           	   TO_DATE(#{res_starttime}, 'YYYY-MM-DD HH24:MI:SS'), TO_DATE(#{res_endtime}, 'YYYY-MM-DD HH24:MI:SS'), #{res_content})
+	</insert>
+
+	<!-- 회의실 예약 취소 -->
+	<delete id="deleteMrRes" parameterType="com.sp.grooveware.reservation.Reservation">
+		DELETE FROM meetingroom_reservation 
+		WHERE meroom_res_no=#{meroom_res_no}
+	</delete>
+
+	<!-- 회의실 예약보기(예약번호별) : 회의실 번호, 회의실 이름, 회의실 정보, 예약 번호, 예약자, 예약 날짜, 예약 시작 시간, 예약 종료시간, 예약 내용 -->
+	<select id="readResByResno" parameterType="Long" resultType="com.sp.grooveware.reservation.Reservation">
+		SELECT m.meroom_id, m.meroom_name, m.meroom_info, mr.meroom_res_no, e.emp_name, 
+          	   TO_CHAR(mr.meroom_resdate,'YYYY-MM-DD') meroom_resdate, TO_CHAR(mr.res_starttime,'HH24:MI') res_starttime, 
+          	   TO_CHAR(mr.res_endtime ,'HH24:MI') res_endtime, mr.res_content
+		FROM meetingroom_reservation mr
+		JOIN meetingroom m ON m.meroom_id=mr.meroom_id
+		JOIN emp e ON mr.emp_no=e.emp_no
+		WHERE meroom_res_no=#{meroom_res_no}
+	</select>
+	
+	<!-- 회의실 예약 현황 리스트(사원별) -->
+	<select id="readResByEmpNo" parameterType="map" resultType="com.sp.grooveware.reservation.Reservation">
+		SELECT m.meroom_id, m.meroom_name, m.meroom_info, mr.meroom_res_no, e.emp_name, 
+               TO_CHAR(mr.meroom_resdate,'YYYY-MM-DD') meroom_resdate, TO_CHAR(mr.res_starttime,'HH24:MI') res_starttime, 
+               TO_CHAR(mr.res_endtime ,'HH24:MI') res_endtime, mr.res_content
+		FROM meetingroom_reservation mr
+		JOIN meetingroom m ON m.meroom_id=mr.meroom_id
+		JOIN emp e ON mr.emp_no=e.emp_no
+		WHERE e.emp_no=#{emp_no}
+	</select>
+	
+	<!-- 회의실 예약 현황 리스트(회의실별) -->
+	<select id="readResByMr" parameterType="map" resultType="com.sp.grooveware.reservation.Reservation">
+	    SELECT m.meroom_id, m.meroom_name, m.meroom_info, mr.meroom_res_no, e.emp_name, 
+               TO_CHAR(mr.meroom_resdate,'YYYY-MM-DD') meroom_resdate, TO_CHAR(mr.res_starttime,'HH24:MI') res_starttime, 
+               TO_CHAR(mr.res_endtime ,'HH24:MI') res_endtime, mr.res_content
+		FROM meetingroom_reservation mr
+		JOIN meetingroom m ON m.meroom_id=mr.meroom_id
+		JOIN emp e ON mr.emp_no=e.emp_no
+		WHERE m.meroom_id=#{meroom_id}
+	</select>
+	
+	<!-- 회의실 예약 현황 리스트(예약날짜별) -->
+	<select id="listResByDate" parameterType="map" resultType="com.sp.grooveware.reservation.Reservation">
+	    SELECT m.meroom_id, m.meroom_name, m.meroom_info, mr.meroom_res_no, e.emp_name, 
+               TO_CHAR(mr.meroom_resdate,'YYYY-MM-DD') meroom_resdate, TO_CHAR(mr.res_starttime,'HH24:MI') res_starttime, 
+               TO_CHAR(mr.res_endtime ,'HH24:MI') res_endtime, mr.res_content
+		FROM meetingroom_reservation mr
+		JOIN meetingroom m ON m.meroom_id=mr.meroom_id
+		JOIN emp e ON mr.emp_no=e.emp_no
+		WHERE TO_CHAR(mr.meroom_resdate,'YYYY-MM-DD')=#{meroom_resdate}
+	</select>
+	
+	<!-- 회의실 예약 현황 리스트(당일) ?? -->
+	<select id="listResBytoday" parameterType="map" resultType="com.sp.grooveware.reservation.Reservation">
+	    SELECT m.meroom_id, m.meroom_name, m.meroom_info, mr.meroom_res_no, e.emp_name, 
+               TO_CHAR(mr.meroom_resdate,'YYYY-MM-DD') meroom_resdate, TO_CHAR(mr.res_starttime,'HH24:MI') res_starttime, 
+               TO_CHAR(mr.res_endtime ,'HH24:MI') res_endtime, mr.res_content
+		FROM meetingroom_reservation mr
+		JOIN meetingroom m ON m.meroom_id=mr.meroom_id
+		JOIN emp e ON mr.emp_no=e.emp_no
+		WHERE TO_CHAR(mr.meroom_resdate,'YYYY-MM-DD')=#{meroom_resdate}
+	</select>
+	
+	<!-- 회의실 예약 현황 리스트(월별) -->
+	<select id="listMyResByMonth" parameterType="map" resultType="com.sp.grooveware.reservation.Reservation">
+	    SELECT m.meroom_id, m.meroom_name, m.meroom_info, mr.meroom_res_no, e.emp_name, 
+               TO_CHAR(mr.meroom_resdate,'YYYY-MM-DD') meroom_resdate, TO_CHAR(mr.res_starttime,'HH24:MI') res_starttime, 
+               TO_CHAR(mr.res_endtime ,'HH24:MI') res_endtime, mr.res_content
+		FROM meetingroom_reservation mr
+		JOIN meetingroom m ON m.meroom_id=mr.meroom_id
+		JOIN emp e ON mr.emp_no=e.emp_no
+		<where>
+			e.emp_no=${emp_no}
+			<if test="meroom_resdate != null">
+				AND TO_CHAR(mr.meroom_resdate,'YYYYMM')=#{meroom_resdate}
+			</if>
+		</where>
+	</select>
+
+</mapper>

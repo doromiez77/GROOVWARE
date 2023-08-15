@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="address">
+
+
+	<!-- parameterType 입력된 값 전달용  -->
+	<!-- resultType은 쿼리 실행 결과를 매핑 -->
+	<sql id="where-list">
+		<choose>		
+			<when test="condition == 'all'">
+				( INSTR(emp_no, #{keyword}) &gt; 0
+					OR INSTR(emp_name, #{keyword}) &gt; 0
+					OR INSTR(dept_name, #{keyword}) &gt; 0
+					OR INSTR(pos_name, #{keyword}) &gt; 0 )
+			</when>
+			<when test="condition == 'emp_no'">
+				INSTR(emp_no, #{keyword}) &gt; 0
+			</when>
+			<when test="condition == 'emp_name'">
+				INSTR(emp_name, #{keyword}) &gt; 0
+			</when>
+			<when test="condition == 'dept_name' ">
+				INSTR(dept_name, #{keyword}) &gt; 0
+			</when>
+			<when test="condition == 'pos_name' ">
+				INSTR(pos_name, #{keyword}) &gt; 0
+			</when>
+		</choose>
+	</sql>
+	
+    <select id="listAddressMember" parameterType="map" resultType="com.sp.grooveware.address.Address">
+        SELECT emp_no, emp_name,emp_email, dept_name, pos_name, emp_join_date, emp_tel, emp_status, 
+        	NVL(friend_no, 0) friend_no
+			FROM (
+			  SELECT e.emp_no, e.emp_name, e.emp_email,d.dept_name, p.pos_name, 
+			         TO_CHAR(e.emp_join_date, 'YYYY-MM-DD') emp_join_date,
+			          e.emp_tel, e.emp_status,
+			         ROW_NUMBER() OVER (PARTITION BY e.emp_no ORDER BY eh.pos_startdate DESC, eh.dept_startdate DESC) AS rank
+			  FROM emp e
+			  JOIN emp_history eh ON e.emp_no = eh.emp_no
+			  JOIN dept d ON eh.dept_no = d.dept_no
+			  JOIN pos p ON eh.pos_no = p.pos_no
+			  WHERE e.emp_status = 0
+		) a
+		LEFT OUTER JOIN (
+			SELECT friend_no 
+			FROM address WHERE emp_no = #{emp_no}
+		) f  ON a.emp_no = f.friend_no
+		<where>
+			rank = 1
+			<if test="keyword!=null and keyword!='' ">
+				AND <include refid="where-list"/>
+			</if>
+		</where>
+		ORDER BY emp_status, emp_join_date DESC
+		OFFSET #{offset} ROWS FETCH FIRST #{size} ROWS ONLY
+	</select>
+   
+     <select id="dataCount" parameterType="map" resultType="Integer">
+		SELECT COUNT(*)
+		FROM emp 
+		<where>
+			emp_status = 0
+			<if test="keyword != null and keyword != '' ">
+				AND <include refid="where-list"/>
+			</if>
+		</where>
+	</select>
+	
+	<insert id="insertAddressFriend" parameterType="map">
+	       INSERT INTO address (emp_no, friend_no)
+		   VALUES( #{emp_no}, #{friend_no} )
+	</insert>
+     
+     
+       <select id="listAddressFriend" parameterType="map" resultType="com.sp.grooveware.address.Address">
+        SELECT emp_no, emp_name,emp_email, dept_name, pos_name, emp_join_date, emp_tel, emp_status
+			FROM (
+			  SELECT e.emp_no, e.emp_name, e.emp_email,d.dept_name, p.pos_name, 
+			         TO_CHAR(e.emp_join_date, 'YYYY-MM-DD') emp_join_date,
+			          e.emp_tel, e.emp_status,
+			         ROW_NUMBER() OVER (PARTITION BY e.emp_no ORDER BY eh.pos_startdate DESC, eh.dept_startdate DESC) AS rank
+			  FROM emp e
+			  JOIN emp_history eh ON e.emp_no = eh.emp_no
+			  JOIN dept d ON eh.dept_no = d.dept_no
+			  JOIN pos p ON eh.pos_no = p.pos_no
+			  WHERE e.emp_no IN ( SELECT friend_no FROM address WHERE emp_no = #{emp_no} )
+		)
+		<where>
+			rank = 1
+			<if test="keyword!=null and keyword!='' ">
+				AND <include refid="where-list"/>
+			</if>
+		</where>
+		ORDER BY emp_status, emp_join_date DESC
+		OFFSET #{offset} ROWS FETCH FIRST #{size} ROWS ONLY
+	</select>
+  
+    <select id="friendCount" parameterType="map" resultType="Integer">
+		SELECT COUNT(*)
+		FROM address
+		<where>
+		 	emp_no = #{emp_no}
+			<if test="keyword != null and keyword != '' ">
+				AND <include refid="where-list"/>
+			</if>
+		</where>
+	 </select>
+  
+     <delete id="deleteAddressFriend" parameterType="map">
+         DELETE FROM address
+         WHERE emp_no = #{emp_no} AND
+           friend_no IN
+           <foreach collection="list" item="friend_no" open="(" close=")" separator=",">
+           		#{friend_no}
+           </foreach>
+     </delete>
+  
+     
+  
+</mapper>

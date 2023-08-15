@@ -1,0 +1,123 @@
+
+@charset "UTF-8";
+*, *::after, *::before {
+    box-sizing: border-box;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+}
+
+body {
+   font-family:"Malgun Gothic", "맑은 고딕", NanumGothic, 나눔고딕, 돋움, sans-serif;
+   font-size: 16px;
+   color: #222222;
+   background : #efefef;
+}
+
+.container {
+	width : 100%;
+}
+
+header {
+   width : 100%;
+   height : 56px;
+   display : block;
+   z-index: 999;
+   position: fixed;
+   top: 0;
+   left: 0;
+}
+
+li, ul {
+   list-style: none;
+}
+
+.main-body{
+   width : 100%;
+   padding-top: 55px;
+   position: relative;
+}
+
+.main-menu {
+   width: 100%;
+   height : 100%;
+   display: flex;
+   background: #3039a6;
+}
+
+.main-menu li {
+   display : flex;
+   align-items : center;
+   justify-content: center;
+   width: 180px;
+   
+}
+
+.main-menu li:first-child {
+   display : flex;
+   align-items : ;
+   justify-content: center;
+   width: 150px;
+   
+}
+
+.main-menu li a {
+    color: white;
+    text-decoration: none;
+}
+
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+
+.left-side-bar {
+    background: white;
+    width: 15%;
+    border: 1px solid black;
+    float: left;
+    position : fixed;
+    height : 100%;
+    z-index: 998;
+    left: 0;	
+}
+
+.left-side-bar ul {
+
+    text-align: left;
+    padding: 0;
+}
+
+.left-side-bar ul > li > a {
+    display: block;
+    padding: 10px 10px 10px 30px;
+    white-space: nowrap;
+    margin-top : 3px;
+}
+
+
+.left-side-bar ul > li > a:hover {
+    color: white;
+    background-color: green;
+}
+
+.left-side-bar ul > li > a:first-child {
+    font-weight: bold;
+    padding-left : 20px;
+}
+
+.main-menu li:last-child {
+   width : 150px;
+   margin-left: auto;
+}
+
+.right-contentbody {
+	width : 85%;
+   position: absolute;
+   left : 15%;
+   padding : 70px 100px 70px 100px;
+}

@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="project">
+	<update id="insertProject" parameterType="com.sp.grooveware.project.Project">
+		insert all
+		into pj(pj_no, pj_name, pj_content, pj_creator, pj_start_date, pj_end_date)
+		 values (pj_seq.nextval, #{pj_name}, #{pj_content}, #{pj_creator}, #{pj_start_date, jdbcType=DATE}, #{pj_end_date, jdbcType=DATE})
+		into pj_file(pj_file_no, pj_no, saveFilename, originalFilename)
+		 values (pj_file_seq.nextval, pj_seq.currval, #{saveFilename, jdbcType=VARCHAR}, #{originalFilename, jdbcType=VARCHAR})
+		into cli(client_no, pj_no, client_name)
+		 values (cli_seq.nextval, pj_seq.currval, #{client_name})
+		<foreach collection="emps" item="emp_no" index="index" separator=" " close="SELECT*FROM DUAL">
+	         into  pj_member(pj_member_no, pj_no, pj_join_type, pj_member_join_date)
+		 values
+	        (#{emp_no}, pj_seq.currval, 2, SYSDATE)
+	    </foreach>
+	</update>
+	
+	<insert id="defaultInsert" parameterType="com.sp.grooveware.project.Project">
+		insert into pj_member(pj_member_no, pj_no, pj_join_type, pj_member_join_date)
+		values (#{pj_creator}, pj_seq.currval, 0, SYSDATE)
+	</insert>
+	
+	<update id="insertPjmember" parameterType="com.sp.grooveware.project.Project">
+		insert all
+		<foreach collection="emps" item="emp_no" index="index" separator=" " close="SELECT*FROM DUAL">
+	         into pj_member(pj_member_no, pj_no, pj_join_type, pj_member_join_date)
+		 values
+	        (#{emp_no}, #{pj_no}, 2, SYSDATE)
+	    </foreach> 
+	</update>
+	
+	
+ 	<sql id="where-list">
+		<choose>
+			<when test="condition == 'pj_name' ">
+			   ( INSTR(pj_name, #{keyword}) &gt; 0 )
+			</when>
+			<when test="condition == 'pj_creator' ">
+			   ( INSTR(pj_creator, #{keyword}) &gt; 0 )
+			</when>
+			<when test="condition == 'pj_start_date' ">
+			   ( TO_CHAR(pj_start_date, 'YYYYMMDD') = #{keyword}
+		          OR TO_CHAR(pj_start_date, 'YYYY-MM-DD') = #{keyword} )
+			</when>
+			<when test="condition == 'pj_end_date' ">
+			   ( TO_CHAR(pj_end_date, 'YYYYMMDD') = #{keyword}
+		          OR TO_CHAR(pj_end_date, 'YYYY-MM-DD') = #{keyword} )
+			</when>
+			<when test="condition == 'client_name' ">
+			   ( INSTR(client_name, #{keyword}) &gt; 0 )
+			</when>
+			<otherwise>
+			    INSTR(${condition}, #{keyword}) &gt; 0
+			</otherwise>
+		</choose>
+	</sql>
+	
+	<!-- 글 개수 -->
+	<select id="dataCount" parameterType="map" resultType="Integer">
+		SELECT NVL( count(distinct a.pj_no), 0)
+		FROM pj a 
+		JOIN pj_member b ON a.pj_no = b.pj_no  
+		<where>
+			b.pj_member_no = #{login_emp} AND pj_status = #{category}
+			<if test="keyword!=null and keyword!='' ">
+				AND <include refid="where-list"/>
+			</if>
+		</where>   
+	</select>
+
+
+	
+	<!-- 글 리스트 -->
+	<select id="listProject" parameterType="map" resultType="com.sp.grooveware.project.Project">
+		SELECT a.pj_no, pj_name, pj_creator, TO_CHAR(pj_start_date, 'YYYY-MM-DD') AS pj_start_date, TO_CHAR(pj_end_date, 'YYYY-MM-DD') AS pj_end_date, client_name, saveFilename, emp_name
+		FROM pj a 
+		JOIN cli b ON a.pj_no = b.pj_no
+		JOIN pj_member c ON a.pj_no = c.pj_no
+		JOIN pj_file d ON a.pj_no = d.pj_no
+		JOIN emp f ON a.pj_creator = f.emp_no
+		<where>
+			pj_member_no = #{login_emp} AND pj_status = #{category}
+			<if test="keyword!=null and keyword!='' ">
+			  AND <include refid="where-list"/>
+			</if>
+		</where>   
+		ORDER BY a.pj_no DESC
+		OFFSET #{offset} ROWS FETCH FIRST #{size} ROWS ONLY
+	</select>
+
+
+
+	<!-- 친구 리스트 -->
+	<select id="listEmp" parameterType="map" resultType="com.sp.grooveware.project.Project">
+		SELECT a.emp_no, b.dept_name, c.emp_name, d.pos_name
+		FROM (
+		    SELECT x.emp_no, x.history_no, x.dept_no, x.pos_no FROM emp_history x
+		    LEFT OUTER JOIN emp_history y ON x.emp_no = y.emp_no AND x.history_no &lt; y.history_no
+		    WHERE y.emp_no IS NULL) a
+		LEFT OUTER JOIN dept b ON a.dept_no = b.dept_no
+		LEFT OUTER JOIN emp c ON a.emp_no = c.emp_no
+		LEFT OUTER JOIN pos d ON a.pos_no = d.pos_no
+		<where>
+			emp_resign_date is null AND a.emp_no != ${emp_no}
+			<choose>
+				<when test="condition == 'emp_name' ">
+				AND	( INSTR(c.${condition}, #{keyword}) &gt; 0 )
+				</when>
+				<when test="condition == 'emp_no' ">
+				AND	( INSTR(a.${condition}, #{keyword}) &gt; 0 )
+				</when>
+			</choose>
+		</where>
+	</select>
+	
+	
+	<!-- 글보기 -->
+	<select id="readProject" parameterType="Long" resultType="com.sp.grooveware.project.Project">
+		SELECT a.pj_no, pj_name, pj_content, pj_creator, TO_CHAR(pj_start_date, 'YYYY-MM-DD') AS pj_start_date, TO_CHAR(pj_end_date, 'YYYY-MM-DD') AS pj_end_date, pj_status, client_name, saveFilename, originalFilename, emp_name
+		FROM pj a
+		LEFT OUTER JOIN cli b ON a.pj_no = b.pj_no
+		LEFT OUTER JOIN pj_file c ON a.pj_no = c.pj_no
+		LEFT OUTER JOIN emp d ON a.pj_creator = d.emp_no
+		WHERE a.pj_no = #{pj_no}
+	</select>
+
+
+	<select id="readProjectmember" parameterType="long" resultType="com.sp.grooveware.project.Project">
+		SELECT b.pj_member_no, c.emp_no, c.emp_name ,d.dept_name, e.pos_name, b.pj_join_type, TO_CHAR(pj_member_join_date, 'YYYY-MM-DD') AS pj_member_join_date
+		FROM (
+		   SELECT x.emp_no, x.history_no, x.dept_no, x.pos_no FROM emp_history x
+		   LEFT OUTER JOIN emp_history y ON x.emp_no = y.emp_no AND x.history_no &lt; y.history_no
+		   WHERE y.emp_no IS NULL) a
+		LEFT OUTER JOIN pj_member b ON a.emp_no = b.pj_member_no
+		LEFT OUTER JOIN emp c ON a.emp_no = c.emp_no
+		LEFT OUTER JOIN dept d ON a.dept_no = d.dept_no
+		LEFT OUTER JOIN pos e ON a.pos_no = e.pos_no
+		WHERE b.pj_no = #{pj_no}
+		ORDER BY pj_join_type ASC, e.pos_no ASC, d.dept_no ASC	
+	</select>
+
+	<select id="readPM" parameterType="map" resultType="Integer">
+		SELECT pj_join_type
+		FROM pj_member
+		WHERE pj_no = #{pj_no} AND pj_member_no = #{pj_member_no} 
+	</select>
+
+	<update id="updateProject1" parameterType="com.sp.grooveware.project.Project">
+		UPDATE pj SET pj_name=#{pj_name}, pj_content=#{pj_content}, pj_start_date=#{pj_start_date, jdbcType=DATE}, pj_end_date=#{pj_end_date, jdbcType=DATE}
+		WHERE pj_no = #{pj_no}
+	</update>
+
+	<update id="updateProject2" parameterType="com.sp.grooveware.project.Project">
+		UPDATE pj_file SET saveFilename=#{saveFilename, jdbcType=VARCHAR}, originalFilename=#{originalFilename, jdbcType=VARCHAR}
+		WHERE pj_no = #{pj_no}	
+	</update>
+
+	<update id="updateProject3" parameterType="com.sp.grooveware.project.Project">
+		UPDATE cli SET client_name=#{client_name}
+		WHERE pj_no = #{pj_no}
+	</update>
+	
+	<!-- 삭제 -->
+	<delete id="deleteProject1" parameterType="Long">
+		DELETE FROM pj WHERE pj_no = #{pj_no}
+	</delete>	
+
+	<delete id="deleteProject2" parameterType="Long">
+		DELETE FROM pj_file WHERE pj_no = #{pj_no}
+	</delete>	
+
+	<delete id="deleteProject3" parameterType="Long">
+		DELETE FROM pj_member WHERE pj_no = #{pj_no}
+	</delete>	
+
+	<delete id="deleteProject4" parameterType="Long">
+		DELETE FROM cli WHERE pj_no = #{pj_no}
+	</delete>	
+	
+	<select id="readPjmember" parameterType="map" resultType="com.sp.grooveware.project.Project">
+		SELECT pj_no, pj_member_no
+		FROM pj_member
+		WHERE pj_member_no = #{pj_member_no} AND pj_no = #{pj_no}
+	</select>
+	
+	<delete id="deletePjmember" parameterType="map">
+		DELETE FROM pj_member WHERE  pj_member_no = #{pj_member_no} AND pj_no = #{pj_no}
+	</delete>
+	
+	<update id="endProject" parameterType="long">
+		UPDATE pj SET pj_status=1
+		WHERE pj_no = #{pj_no}
+	</update>
+
+	<update id="changeAccess" parameterType="com.sp.grooveware.project.Project">
+	       UPDATE pj_member SET pj_join_type = #{pj_join_type}
+	       WHERE pj_no = #{pj_no} AND pj_member_no = #{emp_no}
+	</update>
+	
+	
+	<!-- 삭제 할려고 하위 목표번호 조회 -->
+	<select id="selectGoal" parameterType="long" resultType="long">
+		SELECT goal_no
+		FROM goal
+		WHERE pj_no = #{pj_no}
+	</select>
+	
+	
+	
+
+</mapper>

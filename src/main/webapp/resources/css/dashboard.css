@@ -1,0 +1,161 @@
+@charset "UTF-8";
+
+.dContainer{  
+  width : 100%;
+  height: 100%;
+  display: grid;
+  grid-template-rows : repeat(2, 1fr);
+  grid-template-columns :  repeat(3, 28%);
+  grid-gap: 50px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1%;
+  margin-bottom: 50px;
+  }
+ 
+.dContainer > .item {
+	cursor: pointer;
+	border: 1px solid #d3d3d3;
+	height: 100%;
+	flex-direction: column;
+	justify-content: space-between;
+	border-radius: 5px;
+	background-color: white;
+	word-wrap: break-word;
+	box-shadow: 0 3px 3px rgba(0,0,0,0.2);
+}
+ 
+.dContainer > .item1 {
+	cursor: pointer;
+	border: 1px solid #d3d3d3;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	border-radius: 5px;
+	background-color: white;
+	word-wrap: break-word;
+  	box-shadow: 0 3px 3px rgba(0,0,0,0.2);
+}
+.dContainer > .item2 {
+	cursor: pointer;
+	border: 1px solid #d3d3d3;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	border-radius: 5px;
+	background-color: white;
+	word-wrap: break-word;
+  	box-shadow: 0 3px 3px rgba(0,0,0,0.2);
+}
+ 
+.box-profile{
+ 	width : 50%;
+    padding: 15px;
+ }
+ 
+.box-profile > .profile-picture-dash{
+ 	height : 50%;
+ }
+ 
+ 
+.img-area img {
+	display: block;
+	width: 100%;
+	height: auto;
+}
+
+
+.item1>.desc-area {
+	margin: 20px;
+}
+
+
+
+.item>.desc-area>.title-di {
+	font-size: 19px;
+	height: 45px;
+	font-weight: 700;
+	padding : 8px 8px;
+	margin-bottom: 10px;
+
+}
+
+.item>.desc-area>.date {
+	font-size: 12px;
+}
+
+.fontColor {
+	color: #4048a8;
+}
+
+.subfontColor {
+	color: #4048a8;
+	font-size: 17px;
+	font-weight: 600;
+}
+
+.commuteBox {
+	display : flex;
+	height: 40%;
+}
+
+.title-di{
+	
+}
+
+.textRight {
+	display: inline;
+	float: right;
+}
+
+
+.center {
+	text-align: center;
+}
+
+.divBox {
+	margin-left: 20px;
+	margin-top: 20px;
+	width: 380px;
+}
+
+.bold {
+	font-weight: bold;
+}
+
+.minibox {
+	font-size: 12.5px;
+	color: #4f4f4f;
+	margin-top: 10px;
+	text-align: right;
+}
+.minibox2{
+	font-size: 12px;
+	color: silver;
+	margin-top: 6px;
+	display: flex;
+    justify-content: space-between;
+}
+
+.list-item {
+	display: flex;
+	flex-direction: column;
+	border-bottom: 1px solid silver;
+	padding: 12px;
+	position: relative;
+}
+
+.list-item:before {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	border-top: 1px solid silver;
+}
+
+.list-item:not(:first-child):before {
+	display: none;
+}
