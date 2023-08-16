@@ -3,7 +3,7 @@
 
 
 ## 🖥️ 프로젝트 소개
-쌍용강북교육센터 FinalProject
+쌍용강북교육센터 FinalProject 로서 진행한
 <br>
 사내 그룹웨어 서비스를 참고하여 만든 그룹웨어 페이지입니다.
 <br>
@@ -36,7 +36,7 @@
 #### 이태겸
 
 - 공지사항 - 사내별 부서별 공지사항 조회/작성/수정/삭제/검색
-- 주소록  - 사내별 부서별 공지사항 조회/작성/수정/삭제/검색
+- 주소록  - 사내별 부서별 주소록 CRUD 구현
 - 채팅방 - 1:1 채팅 
 
 <br>
@@ -52,45 +52,79 @@
 
 ## 📌 주요 기능
 #### 로그인 
-- DB값 검증
+- DB값 검증 
 - 로그인 시 쿠키(Cookie) 및 세션(Session) 생성
+
+<img src="https://github.com/doromiez77/GROOVWARE/assets/127407763/c458a6c0-02a5-4cbd-9ea4-86da36e98cd5" alt="로그인" width="300">
+
   
 #### 메인 페이지 
-- 주소 API 연동
-- 회원정보 변경
+- 출근/퇴근 기능
+- 내 휴가통계 , 전자결제 , 업무요청수신함, 사내공지사항, 부서별공지사항 확인기능
+- 전자결제, 인사정보 , 프로젝트 , 일정관리, 그루비룸, 공지사항, 자료실 , 채팅방 
+  
+![메인대쉬보드](https://github.com/doromiez77/GROOVWARE/assets/127407763/36f0dcab-a4d5-4388-a674-c794c3aadf67)
 
-#### 영화 예매 
-- 영화 선택(날짜 지정)
-- 영화관 선택(대분류/소분류 선택) 및 시간 선택
-- 좌석 선택
-- 결제 페이지
-- 예매 완료
-#### 메인 페이지 - <a href="https://github.com/chaehyuenwoo/SpringBoot-Project-MEGABOX/wiki/%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C(%EB%A9%94%EC%9D%B8-Page)" >상세보기 - WIKI 이동</a>
-- YouTube API 연동
-- 메인 포스터(영화) 이미지 슬라이드(CSS)
-#### 1대1문의 및 공지사항 - <a href="" >상세보기 - WIKI 이동</a> 
-- 글 작성, 읽기, 수정, 삭제(CRUD)
+#### 전자 결제
 
-#### 관리자 페이지 
-- 영화관 추가(대분류, 소분류)
-- 영화 추가(상영시간 및 상영관 설정)
+- 문서작성 - 기안서 작성
+- 문서함 - 내문서, 부서문서, 임시보관 , 중요문서함
+- 결제함 - 대기문서, 진행문서, 반려문서, 완료문서 확인
 
+![결제_기안_내문서](https://github.com/doromiez77/GROOVWARE/assets/127407763/572c47be-dbbd-48d5-88dd-36320d33fd11)
 
+![결제_문서](https://github.com/doromiez77/GROOVWARE/assets/127407763/f34b5e91-96fd-42c7-b289-3ba36c5d4660)
 
-<h2></h2> 
+#### 인사정보 
+- 인사등록, 인사관리
+- 근태관리, 휴가관리, 조직도
 
-***
+  
+#### 프로젝트
+- 나의 프로젝트 새 프로젝트 생성, 계층적 계층적 목표 작성 및 조회, 삭제 (CRUD)
+- 메뉴
 
+  ![프로젝트-메인](https://github.com/doromiez77/GROOVWARE/assets/127407763/eef264a6-0e8c-4f25-af68-24915685b221)
+  
+  ![프로젝트_목표_상세](https://github.com/doromiez77/GROOVWARE/assets/127407763/251e7f4f-1ec5-4bda-b8bf-4755e4d984b3)
 
-<h4> 프로젝트 기간 : 2023.06.16 ~ 2023.07.12 </h3>
+#### 일정관리
+- 캘린더 FullCalendar API
+- 자원예약
 
+![프로젝트_캘린더](https://github.com/doromiez77/GROOVWARE/assets/127407763/726269a4-fdec-4eda-a012-c90f4add2b85)
 
+![그루비룸_회의실예약](https://github.com/doromiez77/GROOVWARE/assets/127407763/3d903751-3c42-4200-9940-492dd2ac272b)
 
- <h4> 개발환경 </h4>
-<h5> Windows 10 </h5>
-* STS-3.9.18
-*
-* Apache Tomcat 9.0.75
+#### 그루비룸
+- 커뮤니티 등록, 삭제 (CRUD)
+- 설문조사
+  
+![커뮤니티_목록](https://github.com/doromiez77/GROOVWARE/assets/127407763/f78751b0-78a9-465c-b0cc-436de05f410e)
+
+![커뮤니티_상세](https://github.com/doromiez77/GROOVWARE/assets/127407763/1d821b54-3379-4330-a511-bcd84dd71b83)
+
+#### 공지사항
+- 전체 공지사항 권한별 등록, 수정, 조회, 삭제 CRUD 
+- 부서별 공지사항 권한별 등록, 수정, 조회 , 삭제CRUD
+  
+![공지사항](https://github.com/doromiez77/GROOVWARE/assets/127407763/0544cb23-e8bf-4ab7-870c-4aaa6371193d)
+
+![공지사항_부서별](https://github.com/doromiez77/GROOVWARE/assets/127407763/f9092be6-b944-4963-99ab-e0b78062580c)
+
+#### 자료실 
+- 전사 자료실
+- 개인 자료실
+  
+![자료실](https://github.com/doromiez77/GROOVWARE/assets/127407763/cca9a21e-0253-48dc-b44e-a78d09fa3792)
+
+#### 메신저
+- 주소록 - 전체 사원 주소록 목록 , 개인주소록으로 이동 , 삭제 기능
+- 메신저 - 1:1 채팅, 전체 사원채팅
+  
+![공용주소록](https://github.com/doromiez77/GROOVWARE/assets/127407763/b14cc764-b590-4f17-8bb6-1adfd304b2f4)
+![개인주소록](https://github.com/doromiez77/GROOVWARE/assets/127407763/1462af3d-b2b8-4716-ba3c-dc74dd3b5355)
+![메신저](https://github.com/doromiez77/GROOVWARE/assets/127407763/53a59548-eb7e-46de-9014-403811a4d95e)
 
 
 
